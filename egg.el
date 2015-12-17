@@ -2909,14 +2909,14 @@ with the appropriate arguments."
         (let ((inhibit-read-only t)
               (win (get-buffer-window (current-buffer))))
           (erase-buffer)
-          (kill-buffer)))
+          (kill-buffer (current-buffer))))
     (message "Please enter a log message!")
     (ding))))
 
 (defun egg-log-msg-cancel ()
   "Cancel the current message editing."
   (interactive)
-  (kill-buffer))
+  (kill-buffer (current-buffer)))
 
 (defun egg-log-msg-hist-cycle (&optional forward)
   "Cycle through message log history."
