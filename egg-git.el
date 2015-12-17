@@ -2197,6 +2197,7 @@ See documentation of `egg--git-action-cmd-doc' for the return structure."
 		(t (error "Invalid ref: %s" ref))))
     (egg--git-args 
      t (nconc (list "--no-pager" "log"
+                    egg-git-log-extra-params
 		    "--pretty=oneline"
 		    "--decorate=full"
 		    "--no-color")

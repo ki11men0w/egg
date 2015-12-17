@@ -92,6 +92,12 @@
   "Keymap for an egg buffer show the index version of a file.
 \\{egg-file-index-map}")
 
+(defcustom egg-git-log-extra-params ""
+  "Extra params for git log command."
+  :group 'egg
+  :type  'string)
+
+
 (defvar egg-global-mode-name nil)
 (defvar egg-global-mode nil)
 (defun egg-set-global-mode (&optional string)
@@ -1659,7 +1665,7 @@ rebase session."
       ;; Rebase info and keybindings
       (insert (format "Rebase: commit %s of %s" rebase-step rebase-num))
       (when rebase-stopped-sha
-	(insert " (" (egg-git-to-string "log" "--no-walk" "--pretty=%h:%s" 
+	(insert " (" (egg-git-to-string "log" egg-git-log-extra-params "--no-walk" "--pretty=%h:%s" 
 					rebase-stopped-sha)
 		")"))
       (insert "\n")
@@ -6123,7 +6129,7 @@ A ready made PICKAXE info can be provided by the caller when called non-interact
 		     (car refs))))
 	 (mappings 
 	  (cdr (egg-git-to-lines 
-		"--no-pager" "log" "-g" "--pretty=%H~%gd%n" 
+		"--no-pager" "log" egg-git-log-extra-params "-g" "--pretty=%H~%gd%n" 
 		(format "--max-count=%d" (1+ egg-max-reflogs))
 		(concat ref "@{now}"))))
 	 (beg (point)) 
@@ -6511,7 +6517,7 @@ CLOSURE specifies how the commits will be marked."
 	       (dolist (win wins)
 		 (set-window-point win pos)))))
 	 log-buffer closure)
-   (nconc (list "--no-pager" "log" "--pretty=%H" "--no-color")
+   (nconc (list "--no-pager" "log" egg-git-log-extra-params "--pretty=%H" "--no-color")
 	  args)))
 
 (defun egg-log-buffer-mark-commits-matching (level &optional default-search-term)
@@ -6525,7 +6531,7 @@ rebase. Otherwise mark the commit as PICK."
   (let* ((end-rev (egg-branch-or-HEAD))
 	 (start-rev (egg-commit-at-point))
 	 (revs (concat start-rev ".." end-rev))
-	 (all-commits (egg-git-to-lines "--no-pager" "log" "--pretty=%H" revs))
+	 (all-commits (egg-git-to-lines "--no-pager" "log" egg-git-log-extra-params "--pretty=%H" revs))
 	 (pickaxe-term (egg-buffer-prompt-pickaxe "mark commits" :string default-search-term
 						  (> level 15) (> level 3) t))
 	 (args (cond ((stringp pickaxe-term) (list "-S" pickaxe-term))
@@ -6558,7 +6564,7 @@ rebase. Otherwise mark the commit as PICK."
 				 (if output output "Nothing found!!!"))
 		      (egg-refresh-buffer log-buffer)))
 		  (current-buffer) closure)
-	    (nconc (list "--no-pager" "log" "--pretty=oneline" "--decorate=full" "--no-color")
+	    (nconc (list "--no-pager" "log" egg-git-log-extra-params "--pretty=oneline" "--decorate=full" "--no-color")
 		   args)))
 
 	  ((stringp fetched-data)
