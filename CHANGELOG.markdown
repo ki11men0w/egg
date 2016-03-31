@@ -1,5 +1,11 @@
 # Egg (Emacs Got Git).
 
+## 1.1.1
+- egg's attempting to autoload 'edmacro thanks Felix S Klock II
+
+## 1.1.0
+- support 2.5.x thanks Maksim Golubev !
+
 ## 1.0.9
 - support git 2.x
 
